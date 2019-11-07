@@ -197,6 +197,7 @@ subroutine diag_init()
    call addfld ('Z850    ','m       ',1,    'A','Geopotential Z at 850 mbar pressure surface',phys_decomp)	
    call addfld ('Z500    ','m       ',1,    'A','Geopotential Z at 500 mbar pressure surface',phys_decomp)
    call addfld ('Z300    ','m       ',1,    'A','Geopotential Z at 300 mbar pressure surface',phys_decomp)
+   call addfld ('Z250    ','m       ',1,    'A','Geopotential Z at 250 mbar pressure surface',phys_decomp)
    call addfld ('Z200    ','m       ',1,    'A','Geopotential Z at 200 mbar pressure surface',phys_decomp)
    call addfld ('Z100    ','m       ',1,    'A','Geopotential Z at 100 mbar pressure surface',phys_decomp)
    call addfld ('Z050    ','m       ',1,    'A','Geopotential Z at 50 mbar pressure surface',phys_decomp)
@@ -231,6 +232,9 @@ subroutine diag_init()
 
    call addfld ('MQ      ','kg/m2   ',pver, 'A','Water vapor mass in layer',phys_decomp)
    call addfld ('TMQ     ','kg/m2   ',1,    'A','Total (vertically integrated) precipitable water',phys_decomp)
+   call addfld ('IVT     ','kg/m/s  ',1,    'A','Total (vertically integrated) vapor transport',phys_decomp)
+   call addfld ('uIVT    ','kg/m/s  ',1,    'A','u-component (vertically integrated) vapor transport',phys_decomp)
+   call addfld ('vIVT    ','kg/m/s  ',1,    'A','v-component (vertically integrated) vapor transport',phys_decomp)
    call addfld ('RELHUM  ','percent ',pver, 'A','Relative humidity',phys_decomp)
    call addfld ('RHW  ','percent '   ,pver, 'A','Relative humidity with respect to liquid',phys_decomp)
    call addfld ('RHI  ','percent '   ,pver, 'A','Relative humidity with respect to ice',phys_decomp)
@@ -313,6 +317,9 @@ subroutine diag_init()
       call add_default ('UU      ', 1, ' ')
       call add_default ('OMEGAT  ', 1, ' ')
       call add_default ('TMQ     ', 1, ' ')
+      call add_default ('IVT     ', 1, ' ')
+      call add_default ('uIVT    ', 1, ' ')
+      call add_default ('vIVT    ', 1, ' ')
       call add_default ('PSL     ', 1, ' ')
       if (moist_physics) then
          call add_default ('RELHUM  ', 1, ' ')
@@ -742,6 +749,8 @@ end subroutine diag_conv_tend_ini
     real(r8) ftem(pcols,pver) ! temporary workspace
     real(r8) ftem1(pcols,pver) ! another temporary workspace
     real(r8) ftem2(pcols,pver) ! another temporary workspace
+    real(r8) ftem4(pcols,pver) ! another temporary workspace
+    real(r8) ftem5(pcols,pver) ! another temporary workspace
     real(r8) psl_tmp(pcols)   ! Sea Level Pressure
     real(r8) z3(pcols,pver)   ! geo-potential height
     real(r8) p_surf(pcols)    ! data interpolated to a pressure surface
@@ -831,6 +840,10 @@ end subroutine diag_conv_tend_ini
     if (hist_fld_active('Z300')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 30000._r8, z3, p_surf)
        call outfld('Z300    ', p_surf, pcols, lchnk)
+    end if
+    if (hist_fld_active('Z250')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 25000._r8, z3, p_surf)
+       call outfld('Z250    ', p_surf, pcols, lchnk)
     end if
     if (hist_fld_active('Z200')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 20000._r8, z3, p_surf)
@@ -938,6 +951,33 @@ end subroutine diag_conv_tend_ini
        ftem(:ncol,1) = ftem(:ncol,1) + ftem(:ncol,k)
     end do
     call outfld ('TMQ     ',ftem, pcols   ,lchnk     )
+
+!CAS integrated vapor transport calculation
+
+    !compute uq*dp/g and vq*dp/g
+    ftem4(:ncol,:) = state%q(:ncol,:,1) * state%u(:ncol,:) *state%pdel(:ncol,:) * rga
+    ftem5(:ncol,:) = state%q(:ncol,:,1) * state%v(:ncol,:) *state%pdel(:ncol,:) * rga
+
+    !integrate each component
+    do k=2,pver
+       ftem4(:ncol,1) = ftem4(:ncol,1) + ftem4(:ncol,k)
+       ftem5(:ncol,1) = ftem5(:ncol,1) + ftem5(:ncol,k)
+    end do
+    !compute ivt
+    ftem(:ncol,1) = sqrt( ftem4(:ncol,1)**2 + ftem5(:ncol,1)**2)
+
+    call outfld ('IVT     ',ftem, pcols   ,lchnk     )
+
+    !just output uq*dp/g
+    ftem(:ncol,1) =  ftem4(:ncol,1)
+    call outfld ('uIVT     ',ftem, pcols   ,lchnk     )
+
+    !just output vq*dp/g
+    ftem(:ncol,1) = ftem5(:ncol,1)
+    call outfld ('vIVT     ',ftem, pcols   ,lchnk     )
+
+!CAS
+
 
     if (moist_physics) then
 
