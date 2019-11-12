@@ -22,7 +22,7 @@
 <so4_a1_emis_file  chem="trop_mam3">atm/cam/chem/trop_mozart_aero/emis/RCP85_mam3_so4_a1_surf_19400115-20601215_c190718.nc </so4_a1_emis_file>
 <so4_a2_emis_file  chem="trop_mam3">atm/cam/chem/trop_mozart_aero/emis/RCP85_mam3_so4_a2_surf_19400115-20601215_c190718.nc </so4_a2_emis_file>
 <num_a1_emis_file  chem="trop_mam3">atm/cam/chem/trop_mozart_aero/emis/RCP85_mam3_num_a1_surf_19400115-20601215_c190718.nc </num_a1_emis_file>
-<num_a2_emis_file  chem="trop_mam3">atm/cam/chem/trop_mozart_aero/emis/RCP85_mam3_num_a2_elev_19400115-20601215_c190718.nc </num_a2_emis_file>
+<num_a2_emis_file  chem="trop_mam3">atm/cam/chem/trop_mozart_aero/emis/RCP85_mam3_num_a2_surf_19400115-20601215_c190718.nc </num_a2_emis_file>
 
 <!-- External forcing for MAM -->
 <ext_frc_type>INTERP_MISSING_MONTHS</ext_frc_type>
@@ -36,11 +36,11 @@
 
 <!-- Volcanic aerosol from eruptions is from Caspar Ammann -->
 <prescribed_volcaero_datapath>atm/cam/volc</prescribed_volcaero_datapath>
-<prescribed_volcaero_file>CCSM4_volcanic_1950115-20600115_prototype1_c190629.nc</prescribed_volcaero_file>
+<prescribed_volcaero_file>CCSM4_volcanic_1949115-20600115_prototype1_c191112.nc</prescribed_volcaero_file>
 
 <!-- Prescribed ozone data is from Jean-Francois Lamarque -->
 <prescribed_ozone_datapath> atm/cam/ozone                         </prescribed_ozone_datapath>
-<prescribed_ozone_file>     ozone_rcp85_v1_1.9x2.5_L66_19400115-20551215_c190718.nc</prescribed_ozone_file>
+<prescribed_ozone_file>     ozone_rcp85_v1_1.9x2.5_L66_19400115-20551215_c191111.nc</prescribed_ozone_file>
 <prescribed_ozone_name>     O3                                    </prescribed_ozone_name>
 <prescribed_ozone_type>     INTERP_MISSING_MONTHS                 </prescribed_ozone_type>
 
