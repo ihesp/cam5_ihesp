@@ -247,17 +247,23 @@ subroutine diag_init()
    call addfld ('T200    ','K       ',1,    'A','Temperature at 200 mbar pressure surface',phys_decomp)
    call addfld ('Q850    ','kg/kg   ',1,    'A','Specific Humidity at 850 mbar pressure surface',phys_decomp)
    call addfld ('Q200    ','kg/kg   ',1,    'A','Specific Humidity at 700 mbar pressure surface',phys_decomp)
+   call addfld ('U925    ','m/s     ',1,    'A','Zonal wind at 850 mbar pressure surface',phys_decomp)
    call addfld ('U850    ','m/s     ',1,    'A','Zonal wind at 850 mbar pressure surface',phys_decomp)
    ! nanr
    call addfld ('U500    ','m/s     ',1,    'A','Zonal wind at 500 mbar pressure surface',phys_decomp)
+   call addfld ('U600    ','m/s     ',1,    'A','Zonal wind at 500 mbar pressure surface',phys_decomp)
+   call addfld ('U700    ','m/s     ',1,    'A','Zonal wind at 500 mbar pressure surface',phys_decomp)
    call addfld ('U250    ','m/s     ',1,    'A','Zonal wind at 250 mbar pressure surface',phys_decomp)
    call addfld ('U200    ','m/s     ',1,    'A','Zonal wind at 200 mbar pressure surface',phys_decomp)
    call addfld ('U010    ','m/s     ',1,    'A','Zonal wind at  10 mbar pressure surface',phys_decomp)
+   call addfld ('V925    ','m/s     ',1,    'A','Meridional wind at 850 mbar pressure surface',phys_decomp)
    call addfld ('V850    ','m/s     ',1,    'A','Meridional wind at 850 mbar pressure surface',phys_decomp)
    call addfld ('V200    ','m/s     ',1,    'A','Meridional wind at 200 mbar pressure surface',phys_decomp)
    call addfld ('V250    ','m/s     ',1,    'A','Meridional wind at 250 mbar pressure surface',phys_decomp)
    ! nanr
    call addfld ('V500    ','m/s     ',1,    'A','Meridional wind at 500 mbar pressure surface',phys_decomp)
+   call addfld ('V600    ','m/s     ',1,    'A','Meridional wind at 500 mbar pressure surface',phys_decomp)
+   call addfld ('V700    ','m/s     ',1,    'A','Meridional wind at 500 mbar pressure surface',phys_decomp)
 
    call addfld ('TT      ','K2      ',pver, 'A','Eddy temperature variance' ,phys_decomp)
 
@@ -333,6 +339,7 @@ subroutine diag_init()
    if (history_vdiag) then
      call add_default ('U200', 2, ' ')
      call add_default ('V200', 2, ' ')
+     call add_default ('U925', 2, ' ')
      call add_default ('U850', 2, ' ')
      call add_default ('U200', 3, ' ')
      call add_default ('U850', 3, ' ')
@@ -1062,6 +1069,10 @@ end subroutine diag_conv_tend_ini
        call vertinterp(ncol, pcols, pver, state%pmid, 20000._r8, state%q(1,1,1), p_surf)
        call outfld('Q200    ', p_surf, pcols, lchnk )
     end if
+    if (hist_fld_active('U925')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 85000._r8, state%u, p_surf)
+       call outfld('U925    ', p_surf, pcols, lchnk )
+    end if
     if (hist_fld_active('U850')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 85000._r8, state%u, p_surf)
        call outfld('U850    ', p_surf, pcols, lchnk )
@@ -1075,6 +1086,14 @@ end subroutine diag_conv_tend_ini
        call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%u, p_surf)
        call outfld('U500    ', p_surf, pcols, lchnk )
     end if
+    if (hist_fld_active('U600')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%u, p_surf)
+       call outfld('U600    ', p_surf, pcols, lchnk )
+    end if
+    if (hist_fld_active('U700')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%u, p_surf)
+       call outfld('U700    ', p_surf, pcols, lchnk )
+    end if
 ! -- end
     if (hist_fld_active('U200')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 20000._r8, state%u, p_surf)
@@ -1083,6 +1102,10 @@ end subroutine diag_conv_tend_ini
     if (hist_fld_active('U010')) then
        call vertinterp(ncol, pcols, pver, state%pmid,  1000._r8, state%u, p_surf)
        call outfld('U010    ', p_surf, pcols, lchnk )
+    end if
+    if (hist_fld_active('V925')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 85000._r8, state%v, p_surf)
+       call outfld('V925    ', p_surf, pcols, lchnk )
     end if
     if (hist_fld_active('V850')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 85000._r8, state%v, p_surf)
@@ -1100,6 +1123,14 @@ end subroutine diag_conv_tend_ini
     if (hist_fld_active('V500')) then
        call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%v, p_surf)
        call outfld('V500    ', p_surf, pcols, lchnk )
+    end if
+    if (hist_fld_active('V600')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%v, p_surf)
+       call outfld('V600    ', p_surf, pcols, lchnk )
+    end if
+    if (hist_fld_active('V700')) then
+       call vertinterp(ncol, pcols, pver, state%pmid, 50000._r8, state%v, p_surf)
+       call outfld('V700    ', p_surf, pcols, lchnk )
     end if
 ! -- end
 
