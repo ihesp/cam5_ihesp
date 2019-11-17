@@ -57,7 +57,7 @@
 
   <compset>
     <alias>FAMIPC5</alias>
-    <lname>HIST_CAM50_CLM40%SP_CICE%PRES_DOCN%DOM_RTM_SGLC_SWAV</lname>
+    <lname>AMIP_CAM50_CLM40%SP_CICE%PRES_DOCN%DOM_RTM_SGLC_SWAV</lname>
     <science_support grid="ne120_ne120_mg16"/>
   </compset>
 
