@@ -23,7 +23,7 @@ module cam_pio_utils
 
   integer, parameter, public :: dyn_stagger_decomp=102,dyn_decomp=101,phys_decomp=100
 
-  integer :: pio_iotype 
+  integer :: pio_iotype, pio_ioformat
   integer, parameter :: pio_rearranger = pio_rearr_subset
   ! This variable should be private ?
   type(iosystem_desc_t), pointer, public :: pio_subsystem => null()
@@ -48,13 +48,14 @@ module cam_pio_utils
 contains
 
   subroutine init_pio_subsystem(nlfilename)
-    use shr_pio_mod,   only: shr_pio_getiosys, shr_pio_getiotype
+    use shr_pio_mod,   only: shr_pio_getiosys, shr_pio_getiotype, shr_pio_getioformat
     use cam_instance, only: atm_id
     character(len=*) nlfilename
 
     pio_subsystem => shr_pio_getiosys(atm_id)
     pio_iotype =  shr_pio_getiotype(atm_id)
-
+    pio_ioformat =  shr_pio_getioformat(atm_id)
+    
   end subroutine init_pio_subsystem
 
   subroutine get_decomp (iodesc, field, dtype,  numlev_in, column) 
@@ -631,13 +632,9 @@ contains
     character(len=*), intent(in) :: fname
     integer, intent(in) :: mode
     integer :: ierr
-
-
-    if(use_64bit_nc) then
-       ierr = pio_createfile(pio_subsystem, file, pio_iotype, fname, ior(PIO_CLOBBER,PIO_64BIT_OFFSET))
-    else
-       ierr = pio_createfile(pio_subsystem, file, pio_iotype, fname, PIO_CLOBBER)
-    end if
+    integer :: lmode
+    lmode = ior(mode, pio_ioformat)
+    ierr = pio_createfile(pio_subsystem, file, pio_iotype, fname, lmode)
 
     if(ierr/= PIO_NOERR) then
        call endrun('Failed to create restart file: '//trim(fname))

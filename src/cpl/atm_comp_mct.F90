@@ -12,7 +12,7 @@ module atm_comp_mct
   use seq_infodata_mod
   use seq_timemgr_mod
 
-  use shr_kind_mod     , only: r8 => shr_kind_r8, cl=>shr_kind_cl
+  use shr_kind_mod     , only: r8 => shr_kind_r8, cl=>shr_kind_cl, cx=>shr_kind_cx
   use shr_file_mod     , only: shr_file_getunit, shr_file_freeunit, &
                                shr_file_setLogUnit, shr_file_setLogLevel, &
                                shr_file_getLogUnit, shr_file_getLogLevel, &
@@ -79,12 +79,12 @@ module atm_comp_mct
   type(cam_in_t) , pointer :: cam_in(:)
   type(cam_out_t), pointer :: cam_out(:)
 
-  integer, parameter  :: nlen = 256     ! Length of character strings
+  integer, parameter  :: nlen = 1024     ! Length of character strings
   character(len=nlen) :: fname_srf_cam  ! surface restart filename
   character(len=nlen) :: pname_srf_cam  ! surface restart full pathname
 
   ! Filename specifier for restart surface file
-  character(len=cl) :: rsfilename_spec_cam
+  character(len=cx) :: rsfilename_spec_cam
 
   ! Are all surface types present
   logical :: lnd_present ! if true => land is present
