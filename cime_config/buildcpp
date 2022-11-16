@@ -61,7 +61,8 @@ def buildcpp(case):
         atm_grid = '128x256'
     if atm_grid == 'T341':
         atm_grid = '512x1024'
-
+    if compiler == "nvhpc":
+        compiler = "pgi"
     # if need to build - then construct configure command
     config_opts = ["-s", "-fc_type", compiler, "-ccsm_seq",
                    "-dyn", cam_dycore, "-hgrid", atm_grid,
