@@ -255,7 +255,8 @@ module phys_grid
 !  4: concatenated blocks, no load balancing, no interprocess communication
    integer, private, parameter :: min_lbal_opt = -1
    integer, private, parameter :: max_lbal_opt = 5
-   integer, private, parameter :: def_lbal_opt = 2               ! default
+!   integer, private, parameter :: def_lbal_opt = 2               ! default
+   integer, private, parameter :: def_lbal_opt = 1               ! default
    integer, private :: lbal_opt = def_lbal_opt
 
 ! Physics grid load balancing options:  

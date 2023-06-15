@@ -158,8 +158,8 @@
       <value compset="_CAM%KESSLER">-phys kessler -chem terminator -analytic_ic</value>
 
       <!-- Aquaplanet -->
-      <value compset="_DOCN%SOMAQP">-aquaplanet</value>
-      <value compset="_DOCN%AQP"   >-aquaplanet</value>
+      <value compset="_DOCN%SOMAQP">-ocn aquaplanet</value>
+      <value compset="_DOCN%AQP"   >-ocn aquaplanet</value>
 
       <!-- PORT -->
       <value compset="%PORT">-offline_drv rad</value>
